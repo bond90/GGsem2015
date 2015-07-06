@@ -94,6 +94,7 @@
     FB.api(
     "/{friend-list-id}",
     function (response) {
+      console.log("callback");
       if (response && !response.error) {
         console.log("callback");
         r(response);
