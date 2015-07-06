@@ -91,7 +91,7 @@
   /* make the API call */
   function friends(r) {
     FB.api(
-    "/{friend-list-id}",
+    "/me/friends",
     function (response) {
       console.log("friends()");
       if (response && !response.error) {
