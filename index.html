@@ -95,6 +95,7 @@
     function (response) {
       console.log("friends()");
       if (response && !response.error) {
+        console.log("request ok");
         r(response);
       }
     });
