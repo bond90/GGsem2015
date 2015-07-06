@@ -93,9 +93,9 @@
     FB.api(
     "/me/friends",
     function (response) {
-      console.log("friends()");
       if (response && !response.error) {
         console.log("request ok");
+        console.log(response);
         r(response);
       }
       else{
