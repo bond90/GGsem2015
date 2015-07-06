@@ -18,6 +18,7 @@
       // Logged into your app and Facebook.
       testAPI();
       friends(function(response){
+        console.log("ciao");
         console.log(response);
       });
     } else if (response.status === 'not_authorized') {
@@ -94,6 +95,7 @@
     "/{friend-list-id}",
     function (response) {
       if (response && !response.error) {
+        console.log("callback");
         r(response);
       }
     });
