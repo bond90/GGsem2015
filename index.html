@@ -16,9 +16,9 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
+      console.log("connected");
       testAPI();
       friends(function(response){
-        console.log("ciao");
         console.log(response);
       });
     } else if (response.status === 'not_authorized') {
