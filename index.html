@@ -96,7 +96,6 @@
     function (response) {
       console.log("callback");
       if (response && !response.error) {
-        console.log("callback");
         r(response);
       }
     });
@@ -109,7 +108,7 @@
   the FB.login() function when clicked.
 -->
 
-<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+<fb:login-button scope="public_profile,email" onlogin="checkLoginState();" perms="user_friends">
 </fb:login-button>
 
 <div id="status">
