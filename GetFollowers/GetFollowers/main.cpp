@@ -10,6 +10,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <oauth.h>
+#include <fstream>
 #include <sstream>
 #include <curl/curl.h>
 #include <iostream>
@@ -142,8 +143,9 @@ int main(int argc, const char *argv[])
     GabrieleTWmap.insert({"GabrieleTW", att});
     std::string out;
     json11::Json(GabrieleTWmap).dump(out);
-    std::cout << out;
-    
+    //std::cout << out;
+    std::ofstream file("gabtweet.json", std::ofstream::out);
+    file << out;
     //dealloc
     curl_easy_cleanup(curl);
     curl_global_cleanup();
