@@ -36,7 +36,7 @@ json11::Json get_json_followers(CURL*  curl,
     //const char *url = "https://stream.twitter.com/1.1/statuses/sample.json";
     //REST api friends/followers
     const char* str_url=
-    "https://api.twitter.com/1.1/friends/list.json"
+    "https://api.twitter.com/1.1/followers/list.json"
     "?cursor=-1"
     "&skip_status=true"
     "&include_user_entities=false";
