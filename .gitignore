@@ -1,6 +1,9 @@
 *.7z
 *.exe
 *.zip
+#ignore the bin dir
+GetFollowers/[Bb]in*/
+#ignore the style dir
 astyle/
 #test directory
 livel*/
