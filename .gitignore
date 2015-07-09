@@ -2,7 +2,7 @@
 *.exe
 *.zip
 astyle/
-
+bin/
 #test directory
 livel*/
 exemples*/
