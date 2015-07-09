@@ -110,13 +110,37 @@
   }
 </script>
 <form id="jsonFile" name="jsonFile" enctype="multipart/form-data" method="post">
-
   <fieldset>
     <h2>Json File</h2>
      <input type='file' id='fileinput'>
      <input type='button' id='btnLoad' value='Load' onclick='loadFile();'>
   </fieldset>
 </form>
-<script src="../googleAnalytics.js"></script>
+<form id="jsonFile" name="jsonFile" enctype="multipart/form-data" method="post">
+  <fieldset>
+    <h2>Json File</h2>
+     <div id="myDiv"></div>
+     <input type='button' id='btnLoad' value='Load' onclick='loadFile();'>
+  </fieldset>
+</form>
+<script>
+  var myDiv = document.getElementById("myDiv");
+
+  //Create array of options to be added
+  var array = ["Volvo","Saab","Mercades","Audi"];
+
+  //Create and append select list
+  var selectList = document.createElement("select");
+  selectList.setAttribute("id", "mySelect");
+  myDiv.appendChild(selectList);
+
+  //Create and append the options
+  for (var i = 0; i < array.length; i++) {
+      var option = document.createElement("option");
+      option.setAttribute("value", array[i]);
+      option.text = array[i];
+      selectList.appendChild(option);
+  }
+  </script>
 </body>
 </html>
