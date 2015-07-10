@@ -104,7 +104,10 @@
       var newArr = JSON.parse(lines);
       var keyArr=[];
       ids= [];
+      nodes=[];
       edges = [];
+      inDegree=[];
+      adjacencyMatrix=[];
       checkNode(newArr,keyArr, ids, edges, null);
       graph(ids, edges);
     }
