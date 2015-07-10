@@ -145,12 +145,18 @@ int main(int argc, const char *argv[])
     GabrieleTWmap.insert({"GabrieleTW", att});
     std::string out;
     json11::Json(GabrieleTWmap).dump(out);
-    //std::cout << out;
+    //write ouput
     std::ofstream file("gabtweet.json", std::ofstream::out);
     file << out;
     //dealloc
     curl_easy_cleanup(curl);
     curl_global_cleanup();
-    
+    //error?
+    if(err.size())
+    {
+        std::cerr << err;
+        return -1;
+    }
+    //all ok
     return 0;
 }
