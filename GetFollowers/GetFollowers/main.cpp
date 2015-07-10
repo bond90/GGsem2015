@@ -16,6 +16,8 @@
 #include <iostream>
 #include "json11.hpp"
 
+#define OUPUT_ERRORS 0
+
 static size_t steam_callback(char *buffer, size_t size, size_t nmemb, void *stream)
 {
     std::stringstream& sstream = *((std::stringstream*)stream);
@@ -152,11 +154,13 @@ int main(int argc, const char *argv[])
     curl_easy_cleanup(curl);
     curl_global_cleanup();
     //error?
+#if OUPUT_ERRORS != 0
     if(err.size())
     {
         std::cerr << err;
         return -1;
     }
+#endif
     //all ok
     return 0;
 }
