@@ -63,23 +63,20 @@
       edges: edges
     };
     var options = { 
-        responsive: true,
-        maintainAspectRatio: false
     };
     var network = new vis.Network(container, data, options);
   }
 
   function colorGraph(){
-    if(nodes == null){
+    if(nodes == null || edges == null){
       return;
     }
-    console.log(nodes);
+    if(nodes.length==0||edges.length == 0){
+      return;
+    }
     for (node in nodes["_data"]){
       if(inDegree[node]>4){
-        console.log(node);
-        console.log("coloring");
         nodes["_data"][node].color="red";
-        console.log(node)
       }
     }
     var container = document.getElementById('mynetwork');
@@ -87,9 +84,7 @@
       "nodes": nodes,
       "edges": edges
     };
-    var options = { 
-        responsive: true,
-        maintainAspectRatio: false
+    var options = {
     };
     var network = new vis.Network(container, data, options);
   }
@@ -106,21 +101,17 @@
     }
 
     function receivedText(lines) {
-      console.log(lines);
       var newArr = JSON.parse(lines);
-      console.log(newArr);
       var keyArr=[];
       ids= [];
       edges = [];
       checkNode(newArr,keyArr, ids, edges, null);
-      console.log(inDegree);
       graph(ids, edges);
     }
 
     function checkNode(newArr, keyArr, ids, edges, prec){
       for (i in newArr) {
         if (typeof(newArr[i])=="object") {
-            console.log(i, newArr[i])
             index=keyArr.indexOf(i)
             if(index < 0){
               keyArr.push(i);
