@@ -16,7 +16,7 @@
 #include <iostream>
 #include "json11.hpp"
 
-static size_t steam_string(char *buffer, size_t size, size_t nmemb, void *stream)
+static size_t steam_callback(char *buffer, size_t size, size_t nmemb, void *stream)
 {
     std::stringstream& sstream = *((std::stringstream*)stream);
     sstream << buffer;
@@ -46,7 +46,7 @@ json11::Json get_json_followers(CURL*  curl,
                     ("&count="+std::to_string(count))+
                     ("&screen_name="+str));
     
-    // URL, POST parameters (not used in this example), OAuth signing method, HTTP method, keys
+    // URL, OAuth signing method, HTTP method, keys
     char *signedurl = oauth_sign_url2(url.c_str(), NULL, OA_HMAC, "GET", ckey, csecret, atok, atoksecret);
     
     // URL we're connecting to
@@ -58,19 +58,20 @@ json11::Json get_json_followers(CURL*  curl,
     // libcurl will now fail on an HTTP error (>=400)
     curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
     
-    // In this case, we're not specifying a callback function for
-    // handling received data, so libcURL will use the default, which
-    // is to write to the file specified in WRITEDATA
+    // the stream buffer
     std::stringstream str_stream;
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, steam_string);
+    // set the stream callback
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, steam_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&str_stream);
     
-    // Execute the request!
+    // execute the request
     int curlstatus = curl_easy_perform(curl);
+    
     //error?
     if(curlstatus)
         err =  "curl_easy_perform terminated with status code " + std::to_string(curlstatus)+"\n";
-    //parsing
+    
+    //parsing the json
     return json11::Json::parse(str_stream.str(), err);
 }
 
