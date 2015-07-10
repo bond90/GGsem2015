@@ -1,0 +1,167 @@
+
+<!doctype html>
+<html>
+<head>
+  <title>Network | Basic usage</title>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.4.0/vis.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.4.0/vis.min.css" rel="stylesheet" type="text/css" />
+
+  <style type="text/css">
+    html, body { height: 100%; width: 100%; margin: 0; }
+    #mynetwork {
+      width: auto;
+      height: 75%; 
+      margin: 5px;
+      padding: 5px;
+      border: 1px solid lightgray;
+    }
+    canvas {
+      width: 100%;
+      height: 100%;
+      border: solid 1px red;
+    }
+  </style>
+</head>
+<body onload="onLoadBody()">
+
+<script type="text/javascript">
+  //assets
+  assetsJson = {
+    "None":"/None",
+    "followers 13 per user and depth 2" : "/assets/followers_13_depth_2.json",
+    "followers 200 per user and depth 1" : "/assets/followers_200_depth_1.json",
+    "friends 13 per user and depth 2" : "/assets/friends_13_depth_2.json",
+    "multiple root nodes" : "/assets/followers_13_depth_2_multiple.json"
+  };
+</script>
+<p>
+  Create a simple network with some nodes and edges.
+</p>
+
+<div id="mynetwork" data-paper-resize></div>
+
+<script type="text/javascript">
+  var inDegree=[];
+  var adjacencyMatrix=[];
+  var size = 4000;
+  var nodes = null;
+  var edges = null;
+  var ids2 = null;
+  var nodes2=null;
+  var ids = null;
+  function graph(ids, edges){
+    // create an array with nodes
+    nodes = new vis.DataSet(ids);
+    // create an array with edges
+    edges = new vis.DataSet(edges);
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+    var data = {
+      nodes: nodes,
+      edges: edges
+    };
+    var options = { 
+        responsive: true,
+        maintainAspectRatio: false
+    };
+    var network = new vis.Network(container, data, options);
+  }
+
+  function colorGraph(){
+    if(nodes == null){
+      return;
+    }
+    console.log(nodes);
+    for (node in nodes["_data"]){
+      if(inDegree[node]>4){
+        console.log(node);
+        console.log("coloring");
+        nodes["_data"][node].color="red";
+        console.log(node)
+      }
+    }
+    var container = document.getElementById('mynetwork');
+    var data = {
+      "nodes": nodes,
+      "edges": edges
+    };
+    var options = { 
+        responsive: true,
+        maintainAspectRatio: false
+    };
+    var network = new vis.Network(container, data, options);
+  }
+
+  function loadFileAjax(url){
+    var jsonFile = new XMLHttpRequest();
+    jsonFile.open("GET",url,true);
+    jsonFile.send();
+    jsonFile.onreadystatechange =  function() {
+      if (jsonFile.readyState== 4 && jsonFile.status == 200){
+        if(jsonFile.responseText.length > 0)
+          receivedText(jsonFile.responseText);
+      }
+    }
+
+    function receivedText(lines) {
+      console.log(lines);
+      var newArr = JSON.parse(lines);
+      console.log(newArr);
+      var keyArr=[];
+      ids= [];
+      edges = [];
+      checkNode(newArr,keyArr, ids, edges, null);
+      console.log(inDegree);
+      graph(ids, edges);
+    }
+
+    function checkNode(newArr, keyArr, ids, edges, prec){
+      for (i in newArr) {
+        if (typeof(newArr[i])=="object") {
+            console.log(i, newArr[i])
+            index=keyArr.indexOf(i)
+            if(index < 0){
+              keyArr.push(i);
+              index = keyArr.length-1;
+              inDegree[index] = 0;
+              ids.push({id:index, label:i, color: "#CCCCFF"});
+            }
+            if(prec != null && !adjacencyMatrix[index*size+prec]){
+              inDegree[prec]++;
+              adjacencyMatrix[index*size+prec] = 1;
+                edges.push({from: prec, to: index});
+            }
+
+            checkNode(newArr[i][1], keyArr, ids, edges, index);
+        }
+      }
+    }
+  }
+</script>
+<form id="jsonFile" name="jsonFile" enctype="multipart/form-data" method="post">
+  <h2>Select a JSON file</h2>
+  <select id="jsonSelectFile" onchange="if (this.selectedIndex) onSelectElement(this);">
+  </select>
+  <input type="button" value="Color" onclick="colorGraph();"></input>
+</form>
+
+<script>
+function onSelectElement(element) {
+  loadFileAjax(element.value);
+}
+function onLoadBody() {
+  var jselect = document.getElementById("jsonSelectFile");
+
+  for(name in assetsJson)
+  {
+      var aOption = document.createElement("option");
+      aOption.value=assetsJson[name];
+      aOption.innerHTML=name;
+      jselect.appendChild(aOption);
+  }
+}
+</script>
+</body>
+</html>
